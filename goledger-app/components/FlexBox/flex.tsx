@@ -6,7 +6,7 @@ export const FlexBox = styled.div.attrs((props: FlexProps) => ({
   alignContent: props.alignContent,
   flexDirection: props.flexDirection,
   flexFlow: props.flexFlow,
-  flexWrap: props.flexDirection,
+  flexWrap: props.flexWrap,
   justifyContent: props.justifyContent,
   width: props.width
 }))<FlexProps>`
