@@ -1,6 +1,6 @@
-import React, { useState } from 'react'
+import React from 'react'
 import { GetStaticPaths, GetStaticProps, GetStaticPropsResult } from 'next'
-import { IAlbum, IArtist } from 'interfaces/assets'
+import { IAlbum } from 'interfaces/assets'
 import { readAsset, searchAsset, updateAsset } from 'services/assetsService'
 
 // components
@@ -18,26 +18,18 @@ import {
 // hooks
 import { useForm } from 'react-hook-form'
 import { useRouter } from 'next/router'
-import { CheckDiv } from './styles'
-import { Grid } from 'components/Grid/grid'
 
 interface IAlbumProps {
-  initialAlbum?: IAlbum
-  artists: IArtist[]
+  album?: IAlbum
 }
 
-const Album = ({ initialAlbum, artists }: IAlbumProps) => {
+const Album = ({ album }: IAlbumProps) => {
   const router = useRouter()
-
   const { key } = router.query
-
   const { handleSubmit, register, errors } = useForm<IAlbum>()
-
-  const [album, setAlbum] = useState(initialAlbum)
 
   const onEditAlbum = async (albumData: IAlbum) => {
     await updateAsset(key, albumData)
-    setAlbum(albumData)
   }
 
   return (
@@ -57,13 +49,7 @@ const Album = ({ initialAlbum, artists }: IAlbumProps) => {
               required: 'Campo obrigatório'
             })}
           /> */}
-        <Grid
-          columnsTemplate="1fr 1fr"
-          rowsTemplate="1fr 1fr"
-          gap="1rem"
-          mediaColumns="1fr"
-          mediaRows="1fr 1fr 1fr 1fr"
-        >
+        <FieldWrapper>
           <CustomFormField
             label="Genre"
             name="genre"
@@ -96,19 +82,7 @@ const Album = ({ initialAlbum, artists }: IAlbumProps) => {
               required: 'Campo obrigatório'
             })}
           />
-          <CustomSelect name="artist" inputRef={register({ required: true })}>
-            <option>Select an artist</option>
-            {artists.map(artist => (
-              <option key={artist['@key']} value={artist['@key']}>
-                {artist.name}
-              </option>
-            ))}
-          </CustomSelect>
-          <CheckDiv>
-            <input type="checkbox" name="explicit" ref={register()}></input>
-            <label htmlFor="explicit">Explicit</label>
-          </CheckDiv>
-        </Grid>
+        </FieldWrapper>
         <FormButtons>
           {/* <Button
             type="button"
@@ -156,11 +130,10 @@ export const getStaticProps: GetStaticProps = async ({
   params
 }): Promise<GetStaticPropsResult<any>> => {
   const album = await readAsset(params.key.toString())
-  const artists = await searchAsset('artist')
+
   return {
     props: {
-      initialAlbum: album,
-      artists: artists.result
+      album
     }
   }
 }

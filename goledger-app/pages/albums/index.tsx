@@ -127,7 +127,7 @@ const Album = ({ album, artists }: IAlbumProps) => {
             <Button
               type="button"
               small
-              color="yellow"
+              color="secondary"
               onClick={() => setRegisterAlbum(false)}
             >
               Cancel
