@@ -14,12 +14,12 @@ export const Button = styled.button<IButton>`
   border-radius: 0.2rem;
   font-family: Roboto;
   background-color: ${props =>
-    props.color === 'blue'
+    props.color === 'yellow'
       ? props.theme.colors.secondaryButton.color
       : props.theme.colors.button.color};
   &:hover {
     background-color: ${props =>
-      props.color === 'blue'
+      props.color === 'yellow'
         ? props.theme.colors.secondaryButton.hover
         : props.theme.colors.button.hover};
     cursor: pointer;

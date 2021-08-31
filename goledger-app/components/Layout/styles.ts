@@ -6,4 +6,8 @@ export const Main = styled.main`
   width: 70%;
   margin: 0 auto;
   padding: 20px;
+
+  @media (max-width: 650px) {
+    width: 90%;
+  }
 `

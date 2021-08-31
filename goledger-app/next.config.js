@@ -1,4 +1,13 @@
 /** @type {import('next').NextConfig} */
 module.exports = {
-  reactStrictMode: false
+  reactStrictMode: false,
+  async redirects() {
+    return [
+      {
+        source: '/',
+        destination: '/artists',
+        permanent: true
+      }
+    ]
+  }
 }
