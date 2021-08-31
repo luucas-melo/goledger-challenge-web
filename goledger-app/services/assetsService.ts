@@ -21,10 +21,13 @@ export const createAsset = async (payload: AssetsType) => {
   }
 }
 
-export const readAsset = async (payload: AssetsType) => {
+export const readAsset = async (key: string) => {
   const body = {
-    key: [payload]
+    key: {
+      '@key': key
+    }
   }
+  console.log(body)
   try {
     const data = await fetch(`${BASE_URL}query/readAsset`, {
       method: 'POST',
@@ -33,7 +36,7 @@ export const readAsset = async (payload: AssetsType) => {
         'Content-Type': 'application/json'
       },
       body: JSON.stringify(body)
-    }).then(res => res.json)
+    }).then(res => res.json())
     return data
   } catch (err) {
     return err
@@ -59,6 +62,48 @@ export const searchAsset = async (
       body: JSON.stringify(body)
     })
     const data = await response.json()
+    return data
+  } catch (err) {
+    return err
+  }
+}
+
+export const updateAsset = async (key, payload: AssetsType) => {
+  const body = {
+    update: { '@key': key, ...payload }
+  }
+
+  try {
+    const data = await fetch(`${BASE_URL}invoke/updateAsset`, {
+      method: 'PUT',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(body)
+    }).then(res => res.json())
+
+    return data
+  } catch (err) {
+    return err
+  }
+}
+
+export const deleteAsset = async key => {
+  const body = {
+    key: { '@key': key }
+  }
+
+  try {
+    const data = await fetch(`${BASE_URL}invoke/deleteAsset`, {
+      method: 'DELETE',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(body)
+    }).then(res => res.json())
+
     return data
   } catch (err) {
     return err

@@ -38,6 +38,7 @@ const Album = ({ album, artists }: IAlbumProps) => {
     }
     await createAsset({ '@assetType': 'album', ...albumData })
   }
+
   const router = useRouter()
   return (
     <FlexBox flexDirection="column">
@@ -61,7 +62,7 @@ const Album = ({ album, artists }: IAlbumProps) => {
       </FlexBox>
       <Modal onClose={() => setRegisterAlbum(false)} open={registerAlbum}>
         <Form id="register-form" onSubmit={handleSubmit(onRegister)}>
-          <h3>Register Album </h3>
+          <h1>Add New Album </h1>
           <Grid
             columnsTemplate="1fr 1fr"
             rowsTemplate="1fr 1fr 1fr"
@@ -129,10 +130,10 @@ const Album = ({ album, artists }: IAlbumProps) => {
               color="yellow"
               onClick={() => setRegisterAlbum(false)}
             >
-              Cancelar
+              Cancel
             </Button>
             <Button small type="submit" form="register-form">
-              Enviar
+              Confirm
             </Button>
           </FormButtons>
         </Form>

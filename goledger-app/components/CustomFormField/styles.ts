@@ -6,7 +6,7 @@ export const FormField = styled(TextField).attrs(
     width: props.width
   })
 )`
-  width: ${props => props.width || '300px'};
+  width: ${props => props.width || '240px'};
   margin-top: 1rem;
   & label.Mui-focused {
     color: ${props => props.theme.colors.link};

@@ -6,11 +6,11 @@ export const Form = styled.form`
   align-items: center;
   margin: 0 auto;
   flex-direction: column;
-  padding: 2rem 7rem;
+  padding: 2rem 4rem;
   @media (max-width: 750px) {
     padding: 2rem 2rem;
   }
-  width: 100%;
+  width: 80%;
   h1 {
     color: ${props => props.theme.colors.link};
   }
@@ -21,9 +21,6 @@ export const FormButtons = styled.div`
   width: 100%;
   justify-content: space-between;
   margin-top: 2rem;
-  /* button {
-    margin-right: 0;
-  } */
 
   @media (max-width: 750px) {
     button {
