@@ -9,7 +9,7 @@ const Header: React.FC = () => {
   return (
     <Navbar>
       <MusicNoteIcon />
-      <NavTitle>GoMusic</NavTitle>
+      <NavTitle onClick={() => router.push('/artists')}>GoMusic</NavTitle>
       <FlexBox display="flex" justifyContent="space-around" width="100%">
         <NavLink
           className={router.asPath.includes('/artists') ? 'active' : ''}

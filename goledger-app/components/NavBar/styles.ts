@@ -20,6 +20,7 @@ export const Navbar: any = styled.nav`
 export const NavTitle = styled.h1`
   color: ${props => props.theme.colors.mainColor};
   font-size: 50px;
+  cursor: pointer;
 
   @media (max-width: 650px) {
     font-size: 16px;
