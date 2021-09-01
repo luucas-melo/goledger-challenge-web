@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { ButtonDiv, CheckDiv, IconContainer } from './styles'
+import { ButtonDiv, CheckDiv, IconContainer } from 'styles/albums'
 import { IAlbum, IArtist } from 'interfaces/assets'
 import { GetServerSideProps, GetServerSidePropsResult } from 'next'
 import { createAsset, deleteAsset, searchAsset } from 'services/assetsService'

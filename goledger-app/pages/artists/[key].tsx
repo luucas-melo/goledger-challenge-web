@@ -1,5 +1,11 @@
 import React, { useState } from 'react'
-import { GetStaticPaths, GetStaticProps, GetStaticPropsResult } from 'next'
+import {
+  GetServerSideProps,
+  GetServerSidePropsResult,
+  GetStaticPaths,
+  GetStaticProps,
+  GetStaticPropsResult
+} from 'next'
 import { IAlbum, IArtist } from 'interfaces/assets'
 import { readAsset, searchAsset, updateAsset } from 'services/assetsService'
 
@@ -16,12 +22,12 @@ import { FlexBox } from 'components/FlexBox/flex'
 import Card from 'components/Card'
 import { FormWrapper } from 'components/CustomFormField/styles'
 import Loader from 'components/Loader'
-interface IAlbumProps {
+interface IArtistProps {
   artist?: IArtist
   albums: IAlbum[]
 }
 
-const Artist = ({ artist, albums }: IAlbumProps) => {
+const Artist = ({ artist, albums }: IArtistProps) => {
   const router = useRouter()
 
   const [editAvailable, setEditAvaiable] = useState<boolean>(false)
@@ -70,9 +76,9 @@ const Artist = ({ artist, albums }: IAlbumProps) => {
               <Button
                 small
                 color={!editAvailable ? 'primary' : 'secondary'}
-                onClick={() => {
+                onClick={async () => {
                   setEditAvaiable(!editAvailable)
-                  reset()
+                  await readAsset(artist['@key']).then(res => reset(res))
                 }}
               >
                 Cancel
@@ -114,27 +120,9 @@ const Artist = ({ artist, albums }: IAlbumProps) => {
   )
 }
 
-export const getStaticPaths: GetStaticPaths = async () => {
-  const albums = await searchAsset('artist')
-
-  const result = await albums.result
-
-  // map data to an array of path objects - (key)
-  const paths = result.map(artist => {
-    return {
-      params: { key: artist['@key'].toString() }
-    }
-  })
-
-  return {
-    paths,
-    fallback: false
-  }
-}
-
-export const getStaticProps: GetStaticProps = async ({
+export const getServerSideProps: GetServerSideProps<IArtistProps> = async ({
   params
-}): Promise<GetStaticPropsResult<any>> => {
+}): Promise<GetServerSidePropsResult<IArtistProps>> => {
   const artist = await readAsset(params.key.toString())
 
   const albums = await searchAsset('album', {

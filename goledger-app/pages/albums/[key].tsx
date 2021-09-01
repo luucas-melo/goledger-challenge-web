@@ -1,5 +1,11 @@
 import React, { useState } from 'react'
-import { GetStaticPaths, GetStaticProps, GetStaticPropsResult } from 'next'
+import {
+  GetServerSideProps,
+  GetServerSidePropsResult,
+  GetStaticPaths,
+  GetStaticProps,
+  GetStaticPropsResult
+} from 'next'
 import { IAlbum, IArtist } from 'interfaces/assets'
 import { readAsset, searchAsset, updateAsset } from 'services/assetsService'
 
@@ -18,7 +24,7 @@ import {
 // hooks
 import { useForm } from 'react-hook-form'
 import { useRouter } from 'next/router'
-import { CheckDiv } from './styles'
+import { CheckDiv } from 'styles/albums'
 import { Grid } from 'components/Grid/grid'
 import { FlexBox } from 'components/FlexBox/flex'
 import Loader from 'components/Loader'
@@ -88,9 +94,9 @@ const Album = ({ initialAlbum, artists }: IAlbumProps) => {
               <Button
                 small
                 color={!editAvailable ? 'primary' : 'secondary'}
-                onClick={() => {
+                onClick={async () => {
                   setEditAvailable(!editAvailable)
-                  reset()
+                  await readAsset(key.toString()).then(res => reset(res))
                 }}
               >
                 Cancel
@@ -168,33 +174,16 @@ const Album = ({ initialAlbum, artists }: IAlbumProps) => {
   )
 }
 
-export const getStaticPaths: GetStaticPaths = async () => {
-  const albums = await searchAsset('album')
-
-  const result = await albums.result
-
-  // map data to an array of path objects - (key)
-  const paths = result.map(album => {
-    return {
-      params: { key: album['@key'].toString() }
-    }
-  })
-
-  return {
-    paths,
-    fallback: false
-  }
-}
-
-export const getStaticProps: GetStaticProps = async ({
+export const getServerSideProps: GetServerSideProps = async ({
   params
-}): Promise<GetStaticPropsResult<any>> => {
+}): Promise<GetServerSidePropsResult<any>> => {
   const album = await readAsset(params.key.toString())
   const artists = await searchAsset('artist')
   return {
     props: {
       initialAlbum: album,
-      artists: artists.result
+      artists: artists.result,
+      key: params.key.toString()
     }
   }
 }

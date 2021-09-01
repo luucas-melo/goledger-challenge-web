@@ -9,7 +9,7 @@ import { Button } from 'components/Button/styles'
 import CustomFormField from 'components/CustomFormField'
 import { FlexBox } from 'components/FlexBox/flex'
 import { Form, FormButtons } from 'styles/form'
-import { ButtonDiv } from 'pages/albums/styles'
+import { ButtonDiv } from 'styles/albums'
 import Loader from 'components/Loader'
 import { ModalConfirm } from 'components/Modal/styles'
 
