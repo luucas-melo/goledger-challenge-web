@@ -181,7 +181,7 @@ const Album = ({ initialAlbum, artists }: IAlbumProps) => {
       </Modal>
       <Modal onClose={() => setDeletedModal(false)} open={!!deletedModal}>
         <ModalConfirm>
-          <p>Are you sure you want to delete this artist?</p>
+          <p>Are you sure you want to delete this album?</p>
           <FormButtons>
             <Button
               color="secondary"
