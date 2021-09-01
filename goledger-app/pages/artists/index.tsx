@@ -81,7 +81,6 @@ const Artist = ({ initialArtists }: IArtistProps) => {
         flexWrap="wrap"
         justifyContent="space-between"
         mediaJustifyContent="center"
-        alignItems="center"
       >
         {artists?.map((artist, index) => (
           <Card
