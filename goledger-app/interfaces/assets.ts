@@ -14,7 +14,7 @@ export interface IAlbum {
   nTracks: number
   artist: IArtist | string
   genre?: string
-  explicit?: string
+  explicit?: boolean
   strOptions?: IStreaming[]
 }
 export interface IStreaming {
