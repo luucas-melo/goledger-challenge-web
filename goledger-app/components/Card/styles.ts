@@ -24,6 +24,9 @@ export const SecondaryP = styled.p`
 export const IconDiv = styled.div`
   .MuiSvgIcon-root {
     cursor: pointer;
+    &:hover {
+      color: ${props => props.theme.colors.secondaryText};
+    }
     &:first-child {
       margin-right: 10px;
     }

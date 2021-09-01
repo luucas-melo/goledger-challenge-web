@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import { ButtonDiv, CheckDiv, IconContainer } from './styles'
 import { IAlbum, IArtist } from 'interfaces/assets'
 import { GetServerSideProps, GetServerSidePropsResult } from 'next'
-import { createAsset, searchAsset } from 'services/assetsService'
+import { createAsset, deleteAsset, searchAsset } from 'services/assetsService'
 
 // components
 import Card from 'components/Card/index'
@@ -20,30 +20,61 @@ import { useForm } from 'react-hook-form'
 import CustomSelect from 'components/CustomSelect'
 import Modal from 'components/Modal'
 import { Grid } from 'components/Grid/grid'
+import { ModalConfirm } from 'components/Modal/styles'
+import Loader from 'components/Loader'
 
 interface IAlbumProps {
-  album?: IAlbum[]
+  initialAlbum?: IAlbum[]
   artists?: IArtist[]
 }
 
-const Album = ({ album, artists }: IAlbumProps) => {
-  const [registerAlbum, setRegisterAlbum] = useState<boolean>(false)
+const Album = ({ initialAlbum, artists }: IAlbumProps) => {
+  const [album, setAlbum] = useState(initialAlbum)
 
+  const [registerModal, setRegisterModal] = useState<boolean>(false)
+  const [loadingRegister, setLoadingRegister] = useState<boolean>(false)
+  const [deletedModal, setDeletedModal] = useState<any>(false)
+  const [loadingDelete, setLoadingDelete] = useState<boolean>(false)
   const { handleSubmit, register, errors } = useForm<IAlbum>()
 
   const onRegister = async albumData => {
-    console.log(albumData)
+    setLoadingRegister(true)
     albumData.artist = {
       '@key': albumData.artist
     }
-    await createAsset({ '@assetType': 'album', ...albumData })
+    console.log(albumData)
+    const data = await createAsset({ '@assetType': 'album', ...albumData })
+    setLoadingRegister(false)
+    setRegisterModal(false)
+    if (data[0]['@key']) {
+      setAlbum([data[0], ...album])
+    }
+  }
+
+  const handleDelete = async (deletedAlbum: string) => {
+    try {
+      setLoadingDelete(true)
+      const response = await deleteAsset(deletedAlbum)
+      if (response['@key']) {
+        const updatedAlbum = album.filter(
+          album => album['@key'] !== deletedAlbum
+        )
+        setAlbum(updatedAlbum)
+      }
+      setDeletedModal(false)
+      setLoadingDelete(false)
+    } catch (error) {
+      setDeletedModal(false)
+      setLoadingDelete(false)
+      console.log(error)
+    }
   }
 
   const router = useRouter()
   return (
     <FlexBox flexDirection="column">
       <ButtonDiv>
-        <Button onClick={() => setRegisterAlbum(true)}>Add new album</Button>
+        <Button onClick={() => setRegisterModal(true)}>Add new album</Button>
       </ButtonDiv>
       <FlexBox width="100%" flexWrap="wrap" justifyContent="space-between">
         {album?.map((album, index) => (
@@ -52,7 +83,8 @@ const Album = ({ album, artists }: IAlbumProps) => {
             title={album.name}
             secondary={album.year}
             main={album.genre}
-            editAction={() => router.push(`/albums/${album['@key']}`)}
+            viewAction={() => router.push(`/albums/${album['@key']}`)}
+            deleteAction={() => setDeletedModal(album['@key'])}
           >
             <IconContainer>
               <MusicVideoIcon fontSize="large" />
@@ -60,7 +92,7 @@ const Album = ({ album, artists }: IAlbumProps) => {
           </Card>
         ))}
       </FlexBox>
-      <Modal onClose={() => setRegisterAlbum(false)} open={registerAlbum}>
+      <Modal onClose={() => setRegisterModal(false)} open={registerModal}>
         <Form id="register-form" onSubmit={handleSubmit(onRegister)}>
           <h1>Add New Album </h1>
           <Grid
@@ -76,7 +108,7 @@ const Album = ({ album, artists }: IAlbumProps) => {
               // icon={<MailOutlineIcon />}
               errors={errors}
               inputRef={register({
-                required: 'Campo obrigatório'
+                required: 'Required'
               })}
             />
 
@@ -86,7 +118,7 @@ const Album = ({ album, artists }: IAlbumProps) => {
               // icon={<MailOutlineIcon />}
               errors={errors}
               inputRef={register({
-                required: 'Campo obrigatório'
+                required: 'Required'
               })}
             />
             <CustomFormField
@@ -96,7 +128,7 @@ const Album = ({ album, artists }: IAlbumProps) => {
               type="number"
               errors={errors}
               inputRef={register({
-                required: 'Campo obrigatório'
+                required: 'Required'
               })}
             />
             <CustomFormField
@@ -106,7 +138,7 @@ const Album = ({ album, artists }: IAlbumProps) => {
               errors={errors}
               type="number"
               inputRef={register({
-                required: 'Campo obrigatório'
+                required: 'Required'
               })}
             />
 
@@ -128,15 +160,41 @@ const Album = ({ album, artists }: IAlbumProps) => {
               type="button"
               small
               color="secondary"
-              onClick={() => setRegisterAlbum(false)}
+              onClick={() => setRegisterModal(false)}
             >
               Cancel
             </Button>
-            <Button small type="submit" form="register-form">
-              Confirm
+            <Button
+              small
+              type="submit"
+              form="register-form"
+              disabled={loadingRegister}
+            >
+              {!loadingRegister ? 'Confirm' : <Loader size={20} />}
             </Button>
           </FormButtons>
         </Form>
+      </Modal>
+      <Modal onClose={() => setDeletedModal(false)} open={!!deletedModal}>
+        <ModalConfirm>
+          <p>Are you sure you want to delete this artist?</p>
+          <FormButtons>
+            <Button
+              color="secondary"
+              small
+              onClick={() => setDeletedModal(false)}
+            >
+              Cancel
+            </Button>
+            <Button
+              small
+              onClick={() => handleDelete(deletedModal)}
+              disabled={loadingDelete}
+            >
+              {!loadingDelete ? 'Confirm' : <Loader size={20} />}
+            </Button>
+          </FormButtons>
+        </ModalConfirm>
       </Modal>
     </FlexBox>
   )
@@ -150,7 +208,7 @@ export const getServerSideProps: GetServerSideProps<IAlbumProps> = async ({
 
   return {
     props: {
-      album: albums.result,
+      initialAlbum: albums.result,
       artists: artists.result
     }
   }

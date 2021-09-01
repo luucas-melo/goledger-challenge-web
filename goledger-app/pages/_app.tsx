@@ -5,7 +5,8 @@ import { ThemeProvider } from 'styled-components'
 import { StylesProvider } from '@material-ui/styles'
 import GlobalStyle from 'styles/global'
 import light from 'theme/light'
-
+import { ToastContainer, toast } from 'react-toastify'
+import 'react-toastify/dist/ReactToastify.css'
 function MyApp({ Component, pageProps }: AppProps) {
   return (
     <ThemeProvider theme={light}>
@@ -13,6 +14,7 @@ function MyApp({ Component, pageProps }: AppProps) {
         <Layout>
           <Component {...pageProps} />
           <GlobalStyle />
+          <ToastContainer />
         </Layout>
       </StylesProvider>
     </ThemeProvider>

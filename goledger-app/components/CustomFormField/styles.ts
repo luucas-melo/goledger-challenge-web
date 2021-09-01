@@ -26,4 +26,8 @@ export const InputError = styled.span`
 export const FormWrapper = styled.div`
   display: flex;
   flex-direction: column;
+  width: 100%;
+  h4:first-child {
+    margin-bottom: 2rem;
+  }
 `

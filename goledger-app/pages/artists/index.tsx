@@ -17,6 +17,7 @@ import CustomSelect from 'components/CustomSelect'
 import { mutate } from 'swr'
 import Loader from 'components/Loader'
 import { ModalConfirm } from 'components/Modal/styles'
+import { useRouter } from 'next/router'
 
 interface IArtistProps {
   initialArtists?: IArtist[]
@@ -37,11 +38,16 @@ const Artist = ({ initialArtists }: IArtistProps) => {
   const [loadingDelete, setLoadingDelete] = useState<boolean>(false)
   const [loadingConfirm, setLoadingConfirm] = useState<boolean>(false)
 
+  const router = useRouter()
+
   const onRegister = async artistData => {
     setLoadingConfirm(true)
     try {
       const data = await createAsset({ '@assetType': 'artist', ...artistData })
-      setArtists([...artists, data[0]])
+      console.log(data)
+      if (data[0]['@key']) {
+        setArtists([data[0], ...artists])
+      }
       setRegisterArtist(false)
       setLoadingConfirm(false)
     } catch (error) {
@@ -64,7 +70,7 @@ const Artist = ({ initialArtists }: IArtistProps) => {
     } catch (error) {
       setDeletedModal(false)
       setLoadingDelete(false)
-      console.log(error)
+      return error
     }
   }
 
@@ -81,6 +87,7 @@ const Artist = ({ initialArtists }: IArtistProps) => {
             secondary={artist.description}
             main={artist.location}
             deleteAction={() => setDeletedModal(artist['@key'])}
+            viewAction={() => router.push(`artists/${artist['@key']}`)}
           ></Card>
         ))}
       </FlexBox>
@@ -100,7 +107,7 @@ const Artist = ({ initialArtists }: IArtistProps) => {
               // icon={<MailOutlineIcon />}
               errors={errors}
               inputRef={register({
-                required: 'Campo obrigatório'
+                required: 'Required'
               })}
             />
 
@@ -110,7 +117,7 @@ const Artist = ({ initialArtists }: IArtistProps) => {
               // icon={<MailOutlineIcon />}
               errors={errors}
               inputRef={register({
-                required: 'Campo obrigatório'
+                required: 'Required'
               })}
             />
             <CustomFormField
@@ -120,7 +127,7 @@ const Artist = ({ initialArtists }: IArtistProps) => {
               multiline={true}
               errors={errors}
               inputRef={register({
-                required: 'Campo obrigatório'
+                required: 'Required'
               })}
             />
           </Grid>
@@ -133,7 +140,12 @@ const Artist = ({ initialArtists }: IArtistProps) => {
             >
               Cancel
             </Button>
-            <Button small type="submit" form="register-form">
+            <Button
+              small
+              type="submit"
+              form="register-form"
+              disabled={loadingConfirm}
+            >
               {!loadingConfirm ? 'Confirm' : <Loader size={20} />}
             </Button>
           </FormButtons>
@@ -150,7 +162,11 @@ const Artist = ({ initialArtists }: IArtistProps) => {
             >
               Cancel
             </Button>
-            <Button small onClick={() => handleDelete(deletedModal)}>
+            <Button
+              small
+              onClick={() => handleDelete(deletedModal)}
+              disabled={loadingDelete}
+            >
               {!loadingDelete ? 'Confirm' : <Loader size={20} />}
             </Button>
           </FormButtons>

@@ -7,4 +7,5 @@ export type FlexProps = {
   flexWrap: string
   width: string
   justifyContent: string
+  margin: string
 }

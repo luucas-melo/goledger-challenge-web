@@ -20,6 +20,8 @@ import { useForm } from 'react-hook-form'
 import { useRouter } from 'next/router'
 import { CheckDiv } from './styles'
 import { Grid } from 'components/Grid/grid'
+import { FlexBox } from 'components/FlexBox/flex'
+import Loader from 'components/Loader'
 
 interface IAlbumProps {
   initialAlbum?: IAlbum
@@ -31,32 +33,71 @@ const Album = ({ initialAlbum, artists }: IAlbumProps) => {
 
   const { key } = router.query
 
-  const { handleSubmit, register, errors } = useForm<IAlbum>()
+  const { handleSubmit, register, errors, reset } = useForm<IAlbum>()
 
-  const [album, setAlbum] = useState(initialAlbum)
+  const [album, setAlbum] = useState<IAlbum>(initialAlbum)
+  const [editAvailable, setEditAvailable] = useState<boolean>(false)
+  const [loadingEdit, setLoadingEdit] = useState<boolean>(false)
 
   const onEditAlbum = async (albumData: IAlbum) => {
-    await updateAsset(key, albumData)
-    setAlbum(albumData)
+    setLoadingEdit(true)
+    albumData.artist = {
+      // @ts-ignore
+      '@key': albumData.artist
+    }
+
+    await updateAsset('album', key.toString(), albumData)
+
+    const updatedAlbum = await readAsset(key.toString())
+
+    setAlbum(updatedAlbum)
+    setLoadingEdit(false)
+    setEditAvailable(false)
   }
 
   return (
     <CardWrapper arrowAction={() => router.push('/albums')}>
       <Form id="edit-form" onSubmit={handleSubmit(onEditAlbum)}>
         <FormHeader>
-          <h1>Edit album</h1>
-          {album.name}({album.year})
+          <div>
+            <h1>Album Details</h1>
+            {album.name}({album.year})
+          </div>
+          <FlexBox flexDirection="column" justifyContent="space-between">
+            {!editAvailable && (
+              <Button
+                small
+                onClick={() => setEditAvailable(!editAvailable)}
+                type="button"
+              >
+                Edit album
+              </Button>
+            )}
+            {editAvailable && (
+              <Button
+                small
+                // onClick={() => setEditAvailable(!editAvailable)}
+                type="submit"
+                form="edit-form"
+                disabled={loadingEdit}
+              >
+                {!loadingEdit ? 'Confirm' : <Loader size={20} />}
+              </Button>
+            )}
+            {editAvailable ? (
+              <Button
+                small
+                color={!editAvailable ? 'primary' : 'secondary'}
+                onClick={() => {
+                  setEditAvailable(!editAvailable)
+                  reset()
+                }}
+              >
+                Cancel
+              </Button>
+            ) : null}
+          </FlexBox>
         </FormHeader>
-        {/* <CustomFormField
-            label="Name"
-            name="name"
-            // icon={<MailOutlineIcon />}
-            errors={errors}
-            defaultValue={edited?.name}
-            inputRef={register({
-              required: 'Campo obrigatório'
-            })}
-          /> */}
         <Grid
           columnsTemplate="1fr 1fr"
           rowsTemplate="1fr 1fr"
@@ -71,20 +112,9 @@ const Album = ({ initialAlbum, artists }: IAlbumProps) => {
             defaultValue={album.genre}
             errors={errors}
             inputRef={register({
-              required: 'Campo obrigatório'
+              required: 'Required'
             })}
           />
-          {/* <CustomFormField
-            label="Year"
-            name="year"
-        
-            type="number"
-            errors={errors}
-            defaultValue={edited?.year}
-            inputRef={register({
-              required: 'Campo obrigatório'
-            })}
-          /> */}
           <CustomFormField
             label="Number of tracks"
             name="nTracks"
@@ -93,39 +123,36 @@ const Album = ({ initialAlbum, artists }: IAlbumProps) => {
             errors={errors}
             type="number"
             inputRef={register({
-              required: 'Campo obrigatório'
+              required: 'Required'
             })}
           />
+
           <CustomSelect name="artist" inputRef={register({ required: true })}>
-            <option>Select an artist</option>
+            <option value="">Select an artist </option>
             {artists.map(artist => (
-              <option key={artist['@key']} value={artist['@key']}>
+              <option
+                selected={album.artist['@key'] === artist['@key']}
+                key={artist['@key']}
+                value={artist['@key']}
+              >
                 {artist.name}
               </option>
             ))}
           </CustomSelect>
           <CheckDiv>
-            <input type="checkbox" name="explicit" ref={register()}></input>
+            <input
+              type="checkbox"
+              defaultChecked={album.explicit}
+              name="explicit"
+              ref={register()}
+            ></input>
             <label htmlFor="explicit">Explicit</label>
           </CheckDiv>
         </Grid>
-        <FormButtons>
-          {/* <Button
-            type="button"
-            small
-            color="secondary"
-            // onClick={() => setEdited(null)}
-          >
-            Cancel
-          </Button> */}
-          <Button type="submit" form="edit-form">
-            Confirm
-          </Button>
-        </FormButtons>
         <FormFooter>
           <h4>Available in</h4>
 
-          {album.strOptions.map((streaming, index) => (
+          {album?.strOptions?.map((streaming, index) => (
             <div key={index}>{streaming.name}</div>
           ))}
         </FormFooter>

@@ -10,9 +10,13 @@ export const Form = styled.form`
   @media (max-width: 750px) {
     padding: 2rem 2rem;
   }
-  width: 80%;
+  width: 90%;
   h1 {
     color: ${props => props.theme.colors.link};
+  }
+
+  @media (max-width: 650px) {
+    justify-content: center;
   }
 `
 
@@ -32,7 +36,8 @@ export const FormButtons = styled.div`
 export const FormHeader = styled.div`
   margin-bottom: 2rem;
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
+  justify-content: space-between;
 
   width: 100%;
 `

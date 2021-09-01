@@ -1,6 +1,6 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { GetStaticPaths, GetStaticProps, GetStaticPropsResult } from 'next'
-import { IAlbum } from 'interfaces/assets'
+import { IAlbum, IArtist } from 'interfaces/assets'
 import { readAsset, searchAsset, updateAsset } from 'services/assetsService'
 
 // components
@@ -18,105 +18,120 @@ import {
 // hooks
 import { useForm } from 'react-hook-form'
 import { useRouter } from 'next/router'
-
+import { Grid } from 'components/Grid/grid'
+import { FlexBox } from 'components/FlexBox/flex'
+import Card from 'components/Card'
+import { FormWrapper } from 'components/CustomFormField/styles'
+import Loader from 'components/Loader'
 interface IAlbumProps {
-  album?: IAlbum
+  artist?: IArtist
+  albums: IAlbum[]
 }
 
-const Album = ({ album }: IAlbumProps) => {
+const Artist = ({ artist, albums }: IAlbumProps) => {
   const router = useRouter()
-  const { key } = router.query
-  const { handleSubmit, register, errors } = useForm<IAlbum>()
 
-  const onEditAlbum = async (albumData: IAlbum) => {
-    await updateAsset(key, albumData)
+  const [editAvailable, setEditAvaiable] = useState<boolean>(false)
+  const [loadingEdit, setLoadingEdit] = useState<boolean>(false)
+
+  const { handleSubmit, register, errors, reset } = useForm<IArtist>()
+
+  const onUpdate = async (artistData: IArtist) => {
+    setLoadingEdit(true)
+    // @ts-ignore
+    await updateAsset('artist', artist['@key'], artistData)
+    setLoadingEdit(false)
+    setEditAvaiable(false)
   }
 
   return (
     <CardWrapper arrowAction={() => router.push('/albums')}>
-      <Form id="edit-form" onSubmit={handleSubmit(onEditAlbum)}>
+      <Form id="edit-form" onSubmit={handleSubmit(onUpdate)}>
         <FormHeader>
-          <h1>Edit album</h1>
-          {album.name}({album.year})
+          <div>
+            <h1>Artist Details</h1>
+            {artist.name}, {artist.location}
+          </div>
+          <FlexBox flexDirection="column" justifyContent="space-between">
+            {!editAvailable && (
+              <Button
+                small
+                onClick={() => setEditAvaiable(!editAvailable)}
+                type="button"
+              >
+                Edit artist
+              </Button>
+            )}
+            {editAvailable && (
+              <Button
+                small
+                // onClick={() => setEditAvaiable(!editAvailable)}
+                type="submit"
+                form="edit-form"
+                disabled={loadingEdit}
+              >
+                {!loadingEdit ? 'Confirm' : <Loader size={20} />}
+              </Button>
+            )}
+            {editAvailable ? (
+              <Button
+                small
+                color={!editAvailable ? 'primary' : 'secondary'}
+                onClick={() => {
+                  setEditAvaiable(!editAvailable)
+                  reset()
+                }}
+              >
+                Cancel
+              </Button>
+            ) : null}
+          </FlexBox>
         </FormHeader>
-        {/* <CustomFormField
-            label="Name"
-            name="name"
-            // icon={<MailOutlineIcon />}
-            errors={errors}
-            defaultValue={edited?.name}
-            inputRef={register({
-              required: 'Campo obrigatório'
-            })}
-          /> */}
-        <FieldWrapper>
+        <FlexBox width="100%" justifyContent="center">
           <CustomFormField
-            label="Genre"
-            name="genre"
-            width="240px"
-            defaultValue={album.genre}
+            label="Description"
+            name="description"
+            defaultValue={artist.description}
+            width="100%"
+            maxRow={6}
+            disabled={!editAvailable}
             errors={errors}
-            inputRef={register({
-              required: 'Campo obrigatório'
-            })}
-          />
-          {/* <CustomFormField
-            label="Year"
-            name="year"
-        
-            type="number"
-            errors={errors}
-            defaultValue={edited?.year}
-            inputRef={register({
-              required: 'Campo obrigatório'
-            })}
-          /> */}
-          <CustomFormField
-            label="Number of tracks"
-            name="nTracks"
-            defaultValue={album.nTracks}
-            width="240px"
-            errors={errors}
+            multiline
             type="number"
             inputRef={register({
-              required: 'Campo obrigatório'
+              required: 'Required'
             })}
           />
-        </FieldWrapper>
-        <FormButtons>
-          {/* <Button
-            type="button"
-            small
-            color="secondary"
-            // onClick={() => setEdited(null)}
-          >
-            Cancel
-          </Button> */}
-          <Button type="submit" form="edit-form">
-            Confirm
-          </Button>
-        </FormButtons>
-        <FormFooter>
-          <h4>Available in</h4>
-
-          {album.strOptions.map((streaming, index) => (
-            <div key={index}>{streaming.name}</div>
-          ))}
-        </FormFooter>
+        </FlexBox>
+        <FormButtons></FormButtons>
+        <FormWrapper>
+          <h4>Albums</h4>
+          <FlexBox width="100%" flexWrap="wrap" justifyContent="space-between">
+            {albums?.map((album, index) => (
+              <Card
+                title={album.name}
+                main={album.genre}
+                secondary={album.year}
+              >
+                <div key={index}></div>
+              </Card>
+            ))}
+          </FlexBox>
+        </FormWrapper>
       </Form>
     </CardWrapper>
   )
 }
 
 export const getStaticPaths: GetStaticPaths = async () => {
-  const albums = await searchAsset('album')
+  const albums = await searchAsset('artist')
 
   const result = await albums.result
 
   // map data to an array of path objects - (key)
-  const paths = result.map(album => {
+  const paths = result.map(artist => {
     return {
-      params: { key: album['@key'].toString() }
+      params: { key: artist['@key'].toString() }
     }
   })
 
@@ -129,12 +144,19 @@ export const getStaticPaths: GetStaticPaths = async () => {
 export const getStaticProps: GetStaticProps = async ({
   params
 }): Promise<GetStaticPropsResult<any>> => {
-  const album = await readAsset(params.key.toString())
+  const artist = await readAsset(params.key.toString())
+
+  const albums = await searchAsset('album', {
+    artist: {
+      '@key': params.key.toString()
+    }
+  })
 
   return {
     props: {
-      album
+      artist,
+      albums: albums.result
     }
   }
 }
-export default Album
+export default Artist

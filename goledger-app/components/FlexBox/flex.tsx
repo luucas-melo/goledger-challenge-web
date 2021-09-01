@@ -8,11 +8,13 @@ export const FlexBox = styled.div.attrs((props: FlexProps) => ({
   flexFlow: props.flexFlow,
   flexWrap: props.flexWrap,
   justifyContent: props.justifyContent,
-  width: props.width
+  width: props.width,
+  margin: props.margin
 }))<FlexProps>`
   display: ${({ display }) => display || 'flex'};
   align-content: ${({ alignContent }) => alignContent};
   align-items: ${({ alignItems }) => alignItems};
+  margin: ${({ margin }) => margin};
   ${({ flexFlow }) =>
     !flexFlow &&
     css`

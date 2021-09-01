@@ -1,7 +1,7 @@
 import { FlexBox as IconContainer } from '../FlexBox/flex'
 import React from 'react'
 import { Container, IconDiv, SecondaryP } from './styles'
-import EditIcon from '@material-ui/icons/Edit'
+import VisibilityIcon from '@material-ui/icons/Visibility'
 import DeleteIcon from '@material-ui/icons/Delete'
 
 interface ICard {
@@ -9,7 +9,7 @@ interface ICard {
   main?: string
   secondary?: string
   children?: React.ReactNode
-  editAction?: () => void
+  viewAction?: () => void
   deleteAction?: () => void
 }
 const Card = ({
@@ -17,17 +17,19 @@ const Card = ({
   main,
   secondary,
   children,
-  editAction,
+  viewAction,
   deleteAction
 }: ICard) => {
   return (
     <Container>
-      <IconContainer flexDirection="row-reverse">
-        <IconDiv>
-          <EditIcon onClick={editAction} />
-          <DeleteIcon onClick={deleteAction} />
-        </IconDiv>
-      </IconContainer>
+      {deleteAction || viewAction ? (
+        <IconContainer flexDirection="row-reverse">
+          <IconDiv>
+            {viewAction && <VisibilityIcon onClick={viewAction} />}
+            {deleteAction && <DeleteIcon onClick={deleteAction} />}
+          </IconDiv>
+        </IconContainer>
+      ) : null}
       {children}
       <h4>{title}</h4>
       <p>{main}</p>

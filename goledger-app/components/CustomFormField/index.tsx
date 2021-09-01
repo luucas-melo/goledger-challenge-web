@@ -19,6 +19,7 @@ interface ICustomFormField {
   width?: string
   defaultValue?: string | number
   multiline?: boolean
+  maxRow?: number
   readOnly?: boolean
   onFocus?: () => void
 }
@@ -37,6 +38,7 @@ const CustomFormField: React.FC<ICustomFormField> = ({
   value,
   defaultValue,
   multiline = false,
+  maxRow = 3,
   readOnly = false,
 
   onFocus
@@ -55,7 +57,7 @@ const CustomFormField: React.FC<ICustomFormField> = ({
         defaultValue={defaultValue}
         multiline={multiline}
         minRows={3}
-        maxRows={3}
+        maxRows={maxRow}
         width={width}
         onFocus={onFocus}
         InputLabelProps={
