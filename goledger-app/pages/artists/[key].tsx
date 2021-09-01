@@ -8,17 +8,10 @@ import { Button } from 'components/Button/styles'
 import CustomFormField from 'components/CustomFormField'
 import CustomSelect from 'components/CustomSelect'
 import CardWrapper from 'components/CardWrapper/'
-import {
-  FieldWrapper,
-  Form,
-  FormButtons,
-  FormFooter,
-  FormHeader
-} from 'styles/form'
+import { Form, FormHeader } from 'styles/form'
 // hooks
 import { useForm } from 'react-hook-form'
 import { useRouter } from 'next/router'
-import { Grid } from 'components/Grid/grid'
 import { FlexBox } from 'components/FlexBox/flex'
 import Card from 'components/Card'
 import { FormWrapper } from 'components/CustomFormField/styles'
@@ -103,18 +96,16 @@ const Artist = ({ artist, albums }: IAlbumProps) => {
             })}
           />
         </FlexBox>
-        <FormButtons></FormButtons>
         <FormWrapper>
           <h4>Albums</h4>
           <FlexBox width="100%" flexWrap="wrap" justifyContent="space-between">
             {albums?.map((album, index) => (
               <Card
                 title={album.name}
-                main={album.genre}
+                main={album.genre || 'no genre'}
                 secondary={album.year}
-              >
-                <div key={index}></div>
-              </Card>
+                key={index}
+              ></Card>
             ))}
           </FlexBox>
         </FormWrapper>

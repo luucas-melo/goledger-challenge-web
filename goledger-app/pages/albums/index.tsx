@@ -42,7 +42,7 @@ const Album = ({ initialAlbum, artists }: IAlbumProps) => {
     albumData.artist = {
       '@key': albumData.artist
     }
-    console.log(albumData)
+
     const data = await createAsset({ '@assetType': 'album', ...albumData })
     setLoadingRegister(false)
     setRegisterModal(false)
@@ -66,7 +66,6 @@ const Album = ({ initialAlbum, artists }: IAlbumProps) => {
     } catch (error) {
       setDeletedModal(false)
       setLoadingDelete(false)
-      console.log(error)
     }
   }
 

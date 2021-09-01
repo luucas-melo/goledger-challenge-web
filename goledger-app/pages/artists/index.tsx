@@ -1,5 +1,4 @@
 import React, { useState } from 'react'
-import { useFetch } from 'hooks/useFetch'
 import { GetServerSideProps, GetServerSidePropsResult } from 'next'
 import { IArtist } from 'interfaces/assets'
 import { createAsset, deleteAsset, searchAsset } from 'services/assetsService'
@@ -13,8 +12,6 @@ import { Form, FormButtons } from 'styles/form'
 import { useForm } from 'react-hook-form'
 import { Grid } from 'components/Grid/grid'
 import CustomFormField from 'components/CustomFormField'
-import CustomSelect from 'components/CustomSelect'
-import { mutate } from 'swr'
 import Loader from 'components/Loader'
 import { ModalConfirm } from 'components/Modal/styles'
 import { useRouter } from 'next/router'
@@ -44,7 +41,7 @@ const Artist = ({ initialArtists }: IArtistProps) => {
     setLoadingConfirm(true)
     try {
       const data = await createAsset({ '@assetType': 'artist', ...artistData })
-      console.log(data)
+
       if (data[0]['@key']) {
         setArtists([data[0], ...artists])
       }

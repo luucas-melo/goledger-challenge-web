@@ -12,20 +12,20 @@ const Header: React.FC = () => {
       <NavTitle>GoMusic</NavTitle>
       <FlexBox display="flex" justifyContent="space-around" width="100%">
         <NavLink
-          className={router.asPath === '/?assetType=artist' ? 'active' : ''}
-          onClick={() => router.push('/?assetType=artist')}
+          className={router.asPath.includes('/artists') ? 'active' : ''}
+          onClick={() => router.push('/artists')}
         >
-          Artistas
+          Artists
         </NavLink>
         <NavLink
-          className={router.asPath === '/?assetType=album' ? 'active' : ''}
-          onClick={() => router.push('/?assetType=album')}
+          className={router.asPath.includes('/albums') ? 'active' : ''}
+          onClick={() => router.push('/albums')}
         >
           Albums
         </NavLink>
         <NavLink
-          className={router.asPath === '/?assetType=streaming' ? 'active' : ''}
-          onClick={() => router.push('/?assetType=streaming')}
+          className={router.asPath.includes('/streamings') ? 'active' : ''}
+          onClick={() => router.push('/streamings')}
         >
           Streaming
         </NavLink>
