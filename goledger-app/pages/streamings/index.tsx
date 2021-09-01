@@ -109,8 +109,8 @@ const Album = ({ initialStreaming }: IStreamingProps) => {
             >
               Cancel
             </Button>
-            <Button small type="submit" form="regisConfirmter-form">
-              {loadingRegister ? 'Confirm' : <Loader size={20} />}
+            <Button small type="submit" form="register-form">
+              {!loadingRegister ? 'Confirm' : <Loader size={20} />}
             </Button>
           </FormButtons>
         </Form>
@@ -127,7 +127,7 @@ const Album = ({ initialStreaming }: IStreamingProps) => {
               Cancel
             </Button>
             <Button small onClick={() => handleDelete(deletedModal)}>
-              {loadingDelete ? 'Confirm' : <Loader size={20} />}
+              {!loadingDelete ? 'Confirm' : <Loader size={20} />}
             </Button>
           </FormButtons>
         </ModalConfirm>
