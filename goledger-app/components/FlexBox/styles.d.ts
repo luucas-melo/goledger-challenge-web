@@ -8,4 +8,6 @@ export type FlexProps = {
   width: string
   justifyContent: string
   margin: string
+  mediaJustifyContent: string
+  mediaAlignItems: string
 }

@@ -71,11 +71,16 @@ const Album = ({ initialAlbum, artists }: IAlbumProps) => {
 
   const router = useRouter()
   return (
-    <FlexBox flexDirection="column">
+    <FlexBox flexDirection="column" mediaAlignItems="center">
       <ButtonDiv>
         <Button onClick={() => setRegisterModal(true)}>Add new album</Button>
       </ButtonDiv>
-      <FlexBox width="100%" flexWrap="wrap" justifyContent="space-between">
+      <FlexBox
+        width="100%"
+        flexWrap="wrap"
+        justifyContent="space-between"
+        mediaJustifyContent="center"
+      >
         {album?.map((album, index) => (
           <Card
             key={index}

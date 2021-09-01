@@ -67,13 +67,18 @@ const Album = ({ initialStreaming }: IStreamingProps) => {
 
   const router = useRouter()
   return (
-    <FlexBox flexDirection="column">
+    <FlexBox flexDirection="column" mediaAlignItems="center">
       <ButtonDiv>
         <Button onClick={() => setRegisterModal(true)}>
           Add new streaming
         </Button>
       </ButtonDiv>
-      <FlexBox width="100%" flexWrap="wrap" justifyContent="space-between">
+      <FlexBox
+        width="100%"
+        flexWrap="wrap"
+        justifyContent="space-between"
+        mediaJustifyContent="center"
+      >
         {streaming?.map((stream, index) => (
           <Card
             key={index}

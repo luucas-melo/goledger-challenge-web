@@ -51,7 +51,13 @@ const Artist = ({ artist, albums }: IArtistProps) => {
             <h1>Artist Details</h1>
             {artist.name}, {artist.location}
           </div>
-          <FlexBox flexDirection="column" justifyContent="space-between">
+          <FlexBox
+            flexDirection="column"
+            justifyContent="space-between"
+            width="100%"
+            mediaJustifyContent="center"
+            flexWrap="wrap"
+          >
             {!editAvailable && (
               <Button
                 small
@@ -104,7 +110,12 @@ const Artist = ({ artist, albums }: IArtistProps) => {
         </FlexBox>
         <FormWrapper>
           <h4>Albums</h4>
-          <FlexBox width="100%" flexWrap="wrap" justifyContent="space-between">
+          <FlexBox
+            width="100%"
+            flexWrap="wrap"
+            justifyContent="space-between"
+            mediaJustifyContent="center"
+          >
             {albums?.map((album, index) => (
               <Card
                 title={album.name}

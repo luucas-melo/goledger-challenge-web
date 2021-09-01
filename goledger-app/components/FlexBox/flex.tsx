@@ -8,6 +8,8 @@ export const FlexBox = styled.div.attrs((props: FlexProps) => ({
   flexFlow: props.flexFlow,
   flexWrap: props.flexWrap,
   justifyContent: props.justifyContent,
+  mediaJustifyContent: props.mediaJustifyContent,
+  mediaAlignItems: props.mediaAlignItems,
   width: props.width,
   margin: props.margin
 }))<FlexProps>`
@@ -28,5 +30,9 @@ export const FlexBox = styled.div.attrs((props: FlexProps) => ({
       flex-flow: ${flexFlow};
     `}
   justify-content: ${({ justifyContent }) => justifyContent};
+  @media (max-width: 650px) {
+    justify-content: ${({ mediaJustifyContent }) => mediaJustifyContent};
+    align-items: ${({ mediaAlignItems }) => mediaAlignItems};
+  }
   width: ${({ width }) => width};
 `

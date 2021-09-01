@@ -72,11 +72,17 @@ const Artist = ({ initialArtists }: IArtistProps) => {
   }
 
   return (
-    <FlexBox flexDirection="column">
+    <FlexBox flexDirection="column" width="100%" mediaAlignItems="center">
       <Container>
         <Button onClick={() => setRegisterArtist(true)}>Add new artist</Button>
       </Container>
-      <FlexBox width="100%" flexWrap="wrap" justifyContent="space-between">
+      <FlexBox
+        width="100%"
+        flexWrap="wrap"
+        justifyContent="space-between"
+        mediaJustifyContent="center"
+        alignItems="center"
+      >
         {artists?.map((artist, index) => (
           <Card
             key={index}
@@ -173,16 +179,15 @@ const Artist = ({ initialArtists }: IArtistProps) => {
   )
 }
 
-export const getServerSideProps: GetServerSideProps<IArtistProps> = async ({
-  query
-}): Promise<GetServerSidePropsResult<IArtistProps>> => {
-  const artists = await searchAsset('artist')
+export const getServerSideProps: GetServerSideProps<IArtistProps> =
+  async (): Promise<GetServerSidePropsResult<IArtistProps>> => {
+    const artists = await searchAsset('artist')
 
-  return {
-    props: {
-      initialArtists: artists.result
+    return {
+      props: {
+        initialArtists: artists.result
+      }
     }
   }
-}
 
 export default Artist

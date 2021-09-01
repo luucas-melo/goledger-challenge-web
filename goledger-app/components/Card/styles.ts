@@ -9,6 +9,10 @@ export const Container = styled.div`
   word-wrap: break-word;
 
   min-width: 300px;
+
+  @media (max-width: 650px) {
+    min-width: 200px;
+  }
   padding: 1.5rem;
   margin-bottom: 50px;
   background-color: white;
