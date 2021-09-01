@@ -17,4 +17,7 @@ export const CardContent = styled.div`
       cursor: pointer;
     }
   }
+  box-shadow: 0 4.5px 3.6px rgba(0, 0, 0, 0.019),
+    0 11.3px 9px rgba(0, 0, 0, 0.029), 0 23px 18.4px rgba(0, 0, 0, 0.037),
+    0 47.5px 38px rgba(0, 0, 0, 0.047), 0 130px 104px rgba(0, 0, 0, 0.07);
 `

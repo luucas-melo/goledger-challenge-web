@@ -110,6 +110,7 @@ const Album = ({ initialAlbum, artists }: IAlbumProps) => {
             name="genre"
             width="240px"
             defaultValue={album.genre}
+            disabled={!editAvailable}
             errors={errors}
             inputRef={register({
               required: 'Required'
@@ -119,6 +120,7 @@ const Album = ({ initialAlbum, artists }: IAlbumProps) => {
             label="Number of tracks"
             name="nTracks"
             defaultValue={album.nTracks}
+            disabled={!editAvailable}
             width="240px"
             errors={errors}
             type="number"
@@ -127,7 +129,11 @@ const Album = ({ initialAlbum, artists }: IAlbumProps) => {
             })}
           />
 
-          <CustomSelect name="artist" inputRef={register({ required: true })}>
+          <CustomSelect
+            name="artist"
+            inputRef={register({ required: true })}
+            disabled={!editAvailable}
+          >
             <option value="">Select an artist </option>
             {artists.map(artist => (
               <option
@@ -143,6 +149,7 @@ const Album = ({ initialAlbum, artists }: IAlbumProps) => {
             <input
               type="checkbox"
               defaultChecked={album.explicit}
+              disabled={!editAvailable}
               name="explicit"
               ref={register()}
             ></input>

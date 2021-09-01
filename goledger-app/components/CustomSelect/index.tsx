@@ -8,6 +8,7 @@ interface ISelect {
   selectedText?: string
   defaultValue?: string
   children?: React.ReactNode
+  disabled?: boolean
 }
 
 const CustomSelect: React.FC<ISelect> = ({
@@ -15,10 +16,16 @@ const CustomSelect: React.FC<ISelect> = ({
   name,
   selected = false,
   defaultValue,
-  children
+  children,
+  disabled = false
 }: ISelect) => {
   return (
-    <Select name={name} inputRef={inputRef} defaultValue={defaultValue}>
+    <Select
+      name={name}
+      inputRef={inputRef}
+      defaultValue={defaultValue}
+      disabled={disabled}
+    >
       {children}
     </Select>
   )
