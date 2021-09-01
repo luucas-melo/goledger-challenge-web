@@ -54,7 +54,6 @@ const Artist = ({ artist, albums }: IArtistProps) => {
           <FlexBox
             flexDirection="column"
             justifyContent="space-between"
-            width="100%"
             mediaJustifyContent="center"
             flexWrap="wrap"
           >
