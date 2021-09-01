@@ -5,6 +5,9 @@ export const Container = styled.div`
   border: 1px solid ${props => props.theme.colors.border};
   border-radius: 10px;
   width: 47%;
+  max-width: 600px;
+  word-wrap: break-word;
+
   min-width: 300px;
   padding: 1.5rem;
   margin-bottom: 50px;
