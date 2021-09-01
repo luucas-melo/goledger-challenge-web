@@ -108,7 +108,7 @@ const Artist = ({ artist, albums }: IArtistProps) => {
           />
         </FlexBox>
         <FormWrapper>
-          {albums?.length && <h4>Albums</h4>}
+          {albums?.length !== 0 && <h4>Albums</h4>}
           <FlexBox
             width="100%"
             flexWrap="wrap"

@@ -1,26 +1,41 @@
-# GoLedger Challenge
+## ⁉️ About
 
-In this challenge you will create a web interface to a blockchain application. In this application you must implement an artist and album registration interface.
+- This app was built with NextJS because it gives a better developer experience than use purely React and It provides server rendering, an easy way to set routes, and also has a good Typescript support.
 
-# Requirements
+- Typescript was chosen because it provides because provides a better intelisense, a more consistent data flow, supports optional static typing(optional key)
 
-- Your application should be able to add/remove/edit and show all artist, albums and streaming services.
-- Use **React** (all UI libraries are allowed)
+## 🚀 Technologies
 
-## Instructions
+- JavaScript
+- HTML5
+- CSS3
+- [NextJS](https://nextjs.org/)
+- [styled-components](https://styled-components.com/)
+- [Typescript](https://www.typescriptlang.org/docs/)
+- [material-ui](https://material-ui.com/)
+- [react-hook-form](https://react-hook-form.com/)
+- [react-toastify](https://fkhadra.github.io/react-toastify/introduction)
+- [ESLint](https://eslint.org/)
+- [Prettier](https://prettier.io/)
 
-- Fork the repository https://github.com/goledgerdev/goledger-challenge-web
-    - Fork it, do **NOT** clone it, since you will need to send us your forked repository
-    - If you **cannot** fork it, create a private repository and give access to `samuelvenzi` and `vieirin`
-- Create an web application using React. You will implement the basic operations provided by the API, which are `Create`, `Update`, `Delete` and `Search`.
-- Improve your application with a beautiful UI.
+# 📥 Download
 
-## Server
+```bash
+$ git clone git@github.com:luucas-melo/goledger-challenge-web.git
 
-The data are obtained using a rest server at this address: `http://ec2-100-26-219-1.compute-1.amazonaws.com/api/`
+$ cd goledger-app
 
-Also, a Swagger with the endpoints specifications for the operations is provided at this address: `http://ec2-100-26-219-1.compute-1.amazonaws.com/api-docs/`
+$ yarn
 
-## Complete the challenge
+$ yarn next dev
 
-To complete the challenge, you must send us the link to your forked repository with the code of your application. Please, provide instructions to execute the code.
+$ access https://localhost:3000
+```
+
+## Demo
+
+![Demo](demo-go.gif)
+
+## Note
+
+It wasn't possible to deploy the app since the provided API uses HTTP
