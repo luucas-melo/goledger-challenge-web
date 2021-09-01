@@ -44,7 +44,7 @@ const Artist = ({ artist, albums }: IArtistProps) => {
   }
 
   return (
-    <CardWrapper arrowAction={() => router.push('/albums')}>
+    <CardWrapper arrowAction={() => router.push('/artists')}>
       <Form id="edit-form" onSubmit={handleSubmit(onUpdate)}>
         <FormHeader>
           <div>

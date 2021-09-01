@@ -163,7 +163,7 @@ const Album = ({ initialAlbum, artists }: IAlbumProps) => {
           </CheckDiv>
         </Grid>
         <FormFooter>
-          <h4>Available in</h4>
+          {album?.strOptions?.length ? <h4>Available in</h4> : null}
 
           {album?.strOptions?.map((streaming, index) => (
             <div key={index}>{streaming.name}</div>
